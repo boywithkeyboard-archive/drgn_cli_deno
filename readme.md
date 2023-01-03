@@ -3,7 +3,7 @@
 ### Usage
 
 ```ts
-import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.1.0'
+import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.2.0'
 
 const greetingCommand = new Command({
   name: 'greet',
@@ -22,7 +22,7 @@ const aboutOption = new Option({
 
 const cli = new drgn()
   .name('example')
-  .version('v0.1.0')
+  .version('v1.2.3')
   .command(greetingCommand)
   .option(aboutOption)
   .run
