@@ -115,12 +115,15 @@ export class drgn {
     }
   }
 
-  async run(onStart?: (args: ParsedArgs) => Promise<void> | void) {
+  run(onStart?: (args: ParsedArgs) => Promise<void> | void) {
     const args = parse(Deno.args)
 
     if (onStart)
-      await onStart(args)
-
-    await this.handle(args)
+      return async () => {
+        await onStart(args)
+        await this.handle(args)
+      }
+    else
+      this.handle(args)
   }
 }
