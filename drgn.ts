@@ -27,11 +27,17 @@ export class drgn {
   command(c: Command) {
     this.commands.set(c.name, c)
 
+    if (c.alias)
+      this.commands.set(c.alias, c)
+
     return this
   }
 
   option(o: Option) {
     this.options.set(o.name, o)
+
+    if (o.alias)
+      this.options.set(o.alias, o)
 
     return this
   }
