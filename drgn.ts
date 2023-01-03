@@ -1,5 +1,5 @@
 import { parse } from 'https://deno.land/std@v0.170.0/flags/mod.ts'
-import { bold, gray, underline, white } from 'https://deno.land/std@v0.170.0/fmt/colors.ts'
+import { bold, brightYellow, gray, strikethrough, underline, white } from 'https://deno.land/std@v0.170.0/fmt/colors.ts'
 import { error } from './log.ts'
 import type { Command } from './Command.ts'
 import type { Option } from './Option.ts'
@@ -10,6 +10,7 @@ export class drgn {
   private options
   private _version: string | undefined
   private _name: string | undefined
+  private _updater: (() => Promise<string>) | undefined
 
   constructor() {
     this.commands = new Map<string, Command>()
@@ -17,6 +18,7 @@ export class drgn {
     this._version = undefined
 
     this.run = this.run.bind(this)
+    this._updater = undefined
   }
 
   name(n: string) {
@@ -49,7 +51,7 @@ export class drgn {
     return this
   }
 
-  async handle(args: ParsedArgs) {
+  private async handle(args: ParsedArgs) {
     const help = () => {
       let text = `${bold(this._name ?? '')} ${this._version}`
 
@@ -115,15 +117,20 @@ export class drgn {
     }
   }
 
-  run(onStart?: (args: ParsedArgs) => Promise<void> | void) {
+  updater(u: () => Promise<string>) {
+    this._updater = u
+  }
+
+  async run() {
     const args = parse(Deno.args)
 
-    if (onStart)
-      return async () => {
-        await onStart(args)
-        await this.handle(args)
-      }
-    else
-      this.handle(args)
+    if (this._updater) {
+      const currentVersion = await this._updater()
+
+      if (this._version === currentVersion)
+        console.log(gray(`${brightYellow('update available')} - ${strikethrough(this._version)} » ${bold(currentVersion)}`))
+    }
+
+    await this.handle(args)
   }
 }
