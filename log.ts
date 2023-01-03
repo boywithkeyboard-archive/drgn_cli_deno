@@ -1,10 +1,26 @@
 import { brightBlue, brightGreen, brightRed, yellow, gray } from 'https://deno.land/std@v0.170.0/fmt/colors.ts'
 
-const write = async (message: string) => {
-  await Deno.stdout.write(new TextEncoder().encode(`\r\x1b[K${message}`))
+const log = async (message: string, options?: { clear: boolean }) => {
+  if (options?.clear)
+    message = `\r\x1b[K${message}`
+
+  await Deno.stdout.write(new TextEncoder().encode(message))
 }
 
-export const success = async (message: string, prefix?: string) => await write(`${brightGreen(prefix ?? 'success')} ${gray(`- ${message}`)}`)
-export const error = async (message: string, prefix?: string) => await write(`${brightRed(prefix ?? 'error')} ${gray(`- ${message}`)}`)
-export const info = async (message: string, prefix?: string) => await write(`${brightBlue(prefix ?? 'info')} ${gray(`- ${message}`)}`)
-export const warn = async (message: string, prefix?: string) => await write(`${yellow(prefix ?? 'warning')} ${gray(`- ${message}`)}`)
+export const success = async (message: string, options?: { clear: boolean }) => (
+  await log(`${brightGreen('success')} ${gray(`- ${message}`)}`, options)
+)
+
+export const error = async (message: string, options?: { clear: boolean }) => (
+  await log(`${brightRed('error')} ${gray(`- ${message}`)}`, options)
+)
+
+export const info = async (message: string, options?: { clear: boolean }) => (
+  await log(`${brightBlue('info')} ${gray(`- ${message}`)}`, options)
+)
+
+export const warn = async (message: string, options?: { clear: boolean }) => (
+  await log(`${yellow('warning')} ${gray(`- ${message}`)}`, options)
+)
+
+export default log
