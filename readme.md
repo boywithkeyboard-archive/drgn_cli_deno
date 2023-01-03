@@ -3,7 +3,7 @@
 ### Usage
 
 ```ts
-import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.2.0'
+import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.3.0'
 
 const greetingCommand = new Command({
   name: 'greet',
