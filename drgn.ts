@@ -1,5 +1,6 @@
 import { parse } from 'https://deno.land/std@v0.170.0/flags/mod.ts'
 import { bold, gray, underline, white } from 'https://deno.land/std@v0.170.0/fmt/colors.ts'
+import { error } from './log.ts'
 import type { Command } from './Command.ts'
 import type { Option } from './Option.ts'
 import type { ParsedArgs } from './ParsedArgs.d.ts'
@@ -76,8 +77,18 @@ export class drgn {
     if (args._.length > 0 && typeof args._[0] === 'string') { // command
       const command = this.commands.get(args._[0])
 
-      if (command)
-        await command.action(args)
+      if (command) {
+        try {
+          await command.action(args)
+
+          Deno.exit()
+        } catch (err) {
+          if (err instanceof Error)
+            await error(err.message)
+
+          Deno.exit(1)
+        }
+      }
     } else { // option
       if ((args.version || args.v) && this._version) { // --version, -v option
         console.log(gray(`${bold(this._name ?? '')} ${this._version}`))
@@ -86,10 +97,20 @@ export class drgn {
       } else { // custom option
         const option = this.options.get(Object.keys(args).filter(key => key !== '_')[0])
 
-        if (option)
-          await option.action(args)
-        else
+        if (option) {
+          try {
+            await option.action(args)
+  
+            Deno.exit()
+          } catch (err) {
+            if (err instanceof Error)
+              await error(err.message)
+  
+            Deno.exit(1)
+          }
+        } else {
           help()
+        }
       }
     }
   }
