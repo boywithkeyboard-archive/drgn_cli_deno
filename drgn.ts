@@ -21,36 +21,6 @@ export class drgn {
     this._updater = undefined
   }
 
-  name(n: string) {
-    this._name = n
-
-    return this
-  }
-
-  command(c: Command) {
-    this.commands.set(c.name, c)
-
-    if (c.alias)
-      this.commands.set(c.alias, c)
-
-    return this
-  }
-
-  option(o: Option) {
-    this.options.set(o.name, o)
-
-    if (o.alias)
-      this.options.set(o.alias, o)
-
-    return this
-  }
-
-  version(v: string) {
-    this._version = v
-
-    return this
-  }
-
   private async handle(args: ParsedArgs) {
     const help = () => {
       let text = `${bold(this._name ?? '')} ${this._version}`
@@ -117,8 +87,40 @@ export class drgn {
     }
   }
 
+  name(n: string) {
+    this._name = n
+
+    return this
+  }
+
+  command(c: Command) {
+    this.commands.set(c.name, c)
+
+    if (c.alias)
+      this.commands.set(c.alias, c)
+
+    return this
+  }
+
+  option(o: Option) {
+    this.options.set(o.name, o)
+
+    if (o.alias)
+      this.options.set(o.alias, o)
+
+    return this
+  }
+
+  version(v: string) {
+    this._version = v
+
+    return this
+  }
+
   updater(u: () => Promise<string>) {
     this._updater = u
+
+    return this
   }
 
   async run() {
