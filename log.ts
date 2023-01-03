@@ -1,4 +1,4 @@
-import { brightBlue, brightGreen, brightRed, yellow, gray } from 'https://deno.land/std@v0.170.0/fmt/colors.ts'
+import { brightBlue, brightGreen, brightRed, gray, brightYellow } from 'https://deno.land/std@v0.170.0/fmt/colors.ts'
 
 const log = async (message: string, options?: { clear: boolean }) => {
   if (options?.clear)
@@ -20,7 +20,7 @@ export const info = async (message: string, options?: { clear: boolean }) => (
 )
 
 export const warn = async (message: string, options?: { clear: boolean }) => (
-  await log(`${yellow('warning')} ${gray(`- ${message}`)}`, options)
+  await log(`${brightYellow('warning')} ${gray(`- ${message}`)}`, options)
 )
 
 export default log
