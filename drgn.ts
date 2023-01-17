@@ -1,5 +1,5 @@
-import { parse } from 'https://deno.land/std@v0.172.0/flags/mod.ts'
-import { bold, brightYellow, gray, strikethrough, underline, white } from 'https://deno.land/std@v0.172.0/fmt/colors.ts'
+import { parse } from 'https://deno.land/std@v0.173.0/flags/mod.ts'
+import { bold, brightYellow, gray, strikethrough, underline, white } from 'https://deno.land/std@v0.173.0/fmt/colors.ts'
 import { error } from './log.ts'
 import type { Command } from './Command.ts'
 import type { Option } from './Option.ts'
