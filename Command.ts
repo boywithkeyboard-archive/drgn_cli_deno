@@ -6,7 +6,7 @@ export class Command {
   public description
   public action
 
-  constructor(options: { name: string, alias?: string, description: string }, action: (args: ParsedArgs) => Promise<void> | void) {
+  constructor(options: { name: string, alias?: string, description: string }, action: (args: ParsedArgs & { version: string }) => Promise<void> | void) {
     this.name = options.name
     this.alias = options.alias
     this.description = options.description
