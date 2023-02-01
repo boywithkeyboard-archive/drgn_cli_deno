@@ -26,11 +26,19 @@ if (import.meta.main) {
         }
       } catch (_err) {}
     `] })
+
+    Deno.env.set('__drgn-url', btoa('$url'))
+    Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
+    Deno.env.set('__drgn-version', item.split(':')[0])
     
     const mod = await import('$url'.replace('$version', item.split(':')[0]))
 
     mod.default()
   } else if (item) {
+    Deno.env.set('__drgn-url', btoa('$url'))
+    Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
+    Deno.env.set('__drgn-version', item.split(':')[0])
+
     const mod = await import('$url'.replace('$version', item.split(':')[0]))
 
     mod.default()
@@ -41,6 +49,10 @@ if (import.meta.main) {
       throw new Error('cannot fetch version')
 
     localStorage.setItem('$url', `${version}:${Date.now()}`)
+
+    Deno.env.set('__drgn-url', btoa('$url'))
+    Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
+    Deno.env.set('__drgn-version', version)
 
     const mod = await import('$url'.replace('$version', version))
 

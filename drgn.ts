@@ -8,13 +8,11 @@ import type { ParsedArgs } from './ParsedArgs.d.ts'
 export class drgn {
   private c
   private o
-  private v: string
   private n: string | undefined
 
   constructor() {
     this.c = new Map<string, Command | string>()
     this.o = new Map<string, Option | string>()
-    this.v = 'v0.0.0'
 
     this.run = this.run.bind(this)
   }
@@ -32,7 +30,7 @@ export class drgn {
       command = this.c.get(command) as Command
     
     try {
-      await command.action({ version: this.v, ...args })
+      await command.action({ version: Deno.env.get('__drgn-version') as string, ...args })
 
       Deno.exit()
     } catch (err) {
@@ -53,7 +51,7 @@ export class drgn {
       option = this.o.get(option) as Option
 
     try {
-      await option.action({ version: this.v, ...args })
+      await option.action({ version: Deno.env.get('__drgn-version') as string, ...args })
 
       Deno.exit()
     } catch (err) {
@@ -65,7 +63,7 @@ export class drgn {
   }
 
   private async printHelp() {
-    let text = `${bold(this.n ?? '')} ${this.v}`
+    let text = `${bold(this.n ?? '')} ${Deno.env.get('__drgn-version')}`
 
     text += `\n\n\n${underline(white('USAGE'))}\n\n`
     text += `${white('devyl')} [COMMAND/OPTION] \n`
@@ -91,7 +89,7 @@ export class drgn {
   }
 
   private async printVersion() {
-    await log(gray(`${bold(this.n ?? '')} ${this.v}`))
+    await log(gray(`${bold(this.n ?? '')} ${Deno.env.get('__drgn-version')}`))
   }
 
   name(name: string) {
@@ -118,18 +116,12 @@ export class drgn {
     return this
   }
 
-  version(version: string) {
-    this.v = version
-
-    return this
-  }
-
   async run() {
     const args = parse(Deno.args)
 
     if (args._.length > 0 && typeof args._[0] === 'string')
       await this.executeCommand(args)
-    else if ((args.version || args.v) && this.v)
+    else if (args.version || args.v)
       await this.printVersion()
     else if (args.help || args.h)
       await this.printHelp()
