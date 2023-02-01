@@ -1,6 +1,7 @@
 import { parse } from 'https://deno.land/std@v0.175.0/flags/mod.ts'
-import { bold, gray, underline, white } from 'https://deno.land/std@v0.175.0/fmt/colors.ts'
+import { bold, gray, italic, underline, white } from 'https://deno.land/std@v0.175.0/fmt/colors.ts'
 import log, { error } from './log.ts'
+import ms from 'https://esm.sh/ms@2.1.3'
 import type { Command } from './Command.ts'
 import type { Option } from './Option.ts'
 import type { ParsedArgs } from './ParsedArgs.d.ts'
@@ -89,7 +90,7 @@ export class drgn {
   }
 
   private async printVersion() {
-    await log(gray(`${bold(this.n ?? '')} ${Deno.env.get('__drgn-version')}`))
+    await log(gray(`${bold(this.n ?? '')} ${Deno.env.get('__drgn-version')}\n\n${italic(`Checked for updates ${ms(Date.now() - Number(Deno.env.get('__drgn-last_checked')), { long: true })} ago.`)}`))
   }
 
   name(name: string) {

@@ -14,7 +14,7 @@ if (import.meta.main) {
 
   const item = localStorage.getItem('$url')
 
-  if (item && (Date.now() - Number(item.split(':')[1]) > 1800000/6)) { // refetch every 5 minutes
+  if (item && (Date.now() - Number(item.split(':')[1]) >= 1800000)) { // refetch every 30 minutes
     Deno.run({ cmd: ['deno', 'eval', '--location', 'https://azury.dev/drgn_$location', `
       try {
         const res = await fetch('https://apiland.deno.dev/v2/modules/$name')
@@ -27,6 +27,7 @@ if (import.meta.main) {
       } catch (_err) {}
     `] })
 
+    Deno.env.set('__drgn-last_checked', item.split(':')[1])
     Deno.env.set('__drgn-url', btoa('$url'))
     Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
     Deno.env.set('__drgn-version', item.split(':')[0])
@@ -35,6 +36,7 @@ if (import.meta.main) {
 
     mod.default()
   } else if (item) {
+    Deno.env.set('__drgn-last_checked', item.split(':')[1])
     Deno.env.set('__drgn-url', btoa('$url'))
     Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
     Deno.env.set('__drgn-version', item.split(':')[0])
@@ -48,8 +50,11 @@ if (import.meta.main) {
     if (!version)
       throw new Error('cannot fetch version')
 
-    localStorage.setItem('$url', `${version}:${Date.now()}`)
+    const time = Date.now()
 
+    localStorage.setItem('$url', `${version}:${time}`)
+
+    Deno.env.set('__drgn-last_checked', time.toString())
     Deno.env.set('__drgn-url', btoa('$url'))
     Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
     Deno.env.set('__drgn-version', version)

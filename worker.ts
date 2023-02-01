@@ -20,9 +20,9 @@ export default {
       return new Response(null, { status: 400 })
 
     const runScript = (await res.text())
-      .replace('$name', query.name)
-      .replace('$url', `https://deno.land/x/${query.url}`)
-      .replace('$location', query.location)
+      .replaceAll('$name', query.name)
+      .replaceAll('$url', atob(query.url))
+      .replaceAll('$location', query.location)
 
     const response = new Response(runScript, {
       headers: {
