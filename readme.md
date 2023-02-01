@@ -1,32 +1,35 @@
 ## drgn
 
+A full-stack CLI library for deploying and managing enterprise-grade command line applications.
+
 ### Usage
+
+#### Create a simple CLI
 
 ```ts
 import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.4.0'
 
-const greetingCommand = new Command({
-  name: 'greet',
-  alias: 'hello',
-  description: 'A greeting command.'
-}, ({ name }) => {
-  console.log(name ? `hey ${name}!` : 'hey there!')
-})
-
-const aboutOption = new Option({
-  name: 'about',
-  description: 'About the CLI.'
-}, () => {
-  console.log('Awesome')
+const sayCommand = new Command({
+  name: 'say',
+  alias: 's',
+  description: 'Say something to me.'
+}, ({ _ }) => {
+  console.log(_[1]) // mycli say hello -> 'hello'
 })
 
 const cli = new drgn()
-  .name('example')
-  .version('v1.2.3')
-  .command(greetingCommand)
-  .option(aboutOption)
+  .name('mycli')
+  .command(sayCommand)
   .run
 
-if (import.meta.main)
-  cli()
+export default cli
+```
+
+#### Install your CLI (for autoupdates)
+
+```bash
+# -n: the name under which your cli should be installed
+# -u: the url to your script - MUST be hosted on deno.land, e.g. https://deno.land/x/mycli/$version/cli/mod.ts
+
+deno run -A -q https://deno.land/x/drgn@v0.5.0/installer.ts -n mycli -u mycli@$version/cli/mod.ts
 ```
