@@ -8,6 +8,7 @@ if (import.meta.main) {
   
         return json.latest_version
       }
+    // deno-lint-ignore no-empty
     } catch (_err) {}
   }
 
