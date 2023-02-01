@@ -7,7 +7,7 @@ A full-stack CLI library for deploying and managing enterprise-grade command lin
 #### Create a simple CLI
 
 ```ts
-import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.4.0'
+import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.5.0'
 
 const sayCommand = new Command({
   name: 'say',
