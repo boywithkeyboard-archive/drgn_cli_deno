@@ -1,7 +1,7 @@
 import { parse } from 'https://deno.land/std@v0.176.0/flags/mod.ts'
 import { bold, gray, italic, underline, white } from 'https://deno.land/std@v0.176.0/fmt/colors.ts'
 import log, { error } from './log.ts'
-import ms from 'https://esm.sh/ms@2.1.3'
+import ms from 'https://cdn.skypack.dev/ms@2.1.3?dts'
 import type { Command } from './Command.ts'
 import type { Option } from './Option.ts'
 import type { ParsedArgs } from './ParsedArgs.d.ts'
