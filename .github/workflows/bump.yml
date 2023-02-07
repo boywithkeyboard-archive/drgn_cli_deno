@@ -1,37 +1,14 @@
 name: 'bump'
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 12 * * *' # 12pm, daily
 
 jobs:
   bump:
-    runs-on: 'ubuntu-latest'
-
-    steps:
-      - uses: 'actions/checkout@v3'
-
-      - uses: 'denoland/setup-deno@v1'
-        with:
-          deno-version: 'v1.x'
-
-      - name: 'bump dependencies'
-        run: |
-          deno run -A https://deno.gg/bump@v0
-          CHANGELOG=$(cat dependencies_changelog.md)
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "$CHANGELOG" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          rm dependencies_changelog.md
-
-      - name: 'create pull request'
-        uses: 'peter-evans/create-pull-request@v4.2.3'
-        with:
-          title: 'bump dependencies'
-          author: 'GitHub <noreply@github.com>'
-          commit-message: 'bump dependencies'
-          body: '${{ env.CHANGELOG }}'
-          labels: 'dependencies'
-          reviewers: 'unvented'
-          delete-branch: true
-          branch: 'bump'
+    uses: 'azurystudio/bump/.github/workflows/bump.yml@v0'
+    with:
+      reviewers: 'unvented'
+    secrets:
+      token: '${{ secrets.GITHUB_TOKEN }}'
