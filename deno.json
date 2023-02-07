@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "build": "deno run -A https://deno.land/x/esbuild@v0.17.5/mod.js worker.ts --minify --outfile=worker/worker.js",
+    "build": "deno run -A https://deno.land/x/esbuild@v0.17.6/mod.js worker.ts --minify --outfile=worker/worker.js",
     "publish": "npx wrangler publish worker/worker.js"
   }
 }
