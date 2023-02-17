@@ -16,29 +16,29 @@ export class drgn {
     this.o = new Map<string, Option | string>()
 
     this.run = this.run.bind(this)
-  }
+  } 
 
   private async executeCommand(args: ParsedArgs) {
     if (typeof args._[0] !== 'string')
-      return
+      return 0
 
     let command = this.c.get(args._[0])
 
     if (!command)
-      return
+      return 0
 
     if (typeof command === 'string')
       command = this.c.get(command) as Command
     
     try {
-      await command.action({ version: Deno.env.get('__drgn-version') as string, ...args })
+      await command.action({ version: Deno.env.get('__drgn-version') ?? 'v0.0.0', ...args })
 
-      Deno.exit()
+      return 0
     } catch (err) {
       if (err instanceof Error)
         await error(err.message)
 
-      Deno.exit(1)
+      return 1
     }
   }
 
@@ -46,25 +46,25 @@ export class drgn {
     let option = this.o.get(Object.keys(args).filter(key => key !== '_')[0])
 
     if (!option)
-      return
+      return 0
 
     if (typeof option === 'string')
       option = this.o.get(option) as Option
 
     try {
-      await option.action({ version: Deno.env.get('__drgn-version') as string, ...args })
+      await option.action({ version: Deno.env.get('__drgn-version') ?? 'v0.0.0', ...args })
 
-      Deno.exit()
+      return 0
     } catch (err) {
       if (err instanceof Error)
         await error(err.message)
 
-      Deno.exit(1)
+      return 1
     }
   }
 
   private async printHelp() {
-    let text = `${bold(this.n ?? '')} ${Deno.env.get('__drgn-version')}`
+    let text = `${bold(this.n ?? '')} ${Deno.env.get('__drgn-version') ?? 'v0.0.0'}`
 
     text += `\n\n\n${underline(white('USAGE'))}\n\n`
     text += `${white('devyl')} [COMMAND/OPTION] \n`
@@ -87,10 +87,30 @@ export class drgn {
     }
 
     await log(gray(text))
+
+    return 0
   }
 
   private async printVersion() {
-    await log(gray(`${bold(this.n ?? '')} ${Deno.env.get('__drgn-version')}\n\n${italic(`Checked for updates ${ms(Date.now() - Number(Deno.env.get('__drgn-last_checked')), { long: true })} ago.`)}`))
+    const url = Deno.env.get('__drgn-url')
+
+    if (!url) {
+      await error('something went wrong')
+
+      return 1
+    }
+
+    const item = localStorage.getItem(url)
+
+    if (!item) {
+      await error('something went wrong')
+
+      return 1
+    }
+
+    await log(gray(`${bold(this.n ?? '')} ${item.split(':')[0]}\n\n${italic(`Checked for updates ${ms(Date.now() - Number(item.split(':')[1]), { long: true })} ago.`)}`))
+
+    return 0
   }
 
   name(name: string) {
@@ -120,13 +140,17 @@ export class drgn {
   async run() {
     const args = parse(Deno.args)
 
+    let result: number
+
     if (args._.length > 0 && typeof args._[0] === 'string')
-      await this.executeCommand(args)
+      result = await this.executeCommand(args)
     else if (args.version || args.v)
-      await this.printVersion()
+      result = await this.printVersion()
     else if (args.help || args.h)
-      await this.printHelp()
+      result = await this.printHelp()
     else
-      await this.executeOption(args)
+      result = await this.executeOption(args)
+
+    return result
   }
 }
