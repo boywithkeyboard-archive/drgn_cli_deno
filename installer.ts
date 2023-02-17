@@ -7,7 +7,7 @@ if (import.meta.main) {
   , id = Date.now().toString()
 
   await Deno.run({
-    cmd: ['deno', 'install', '-q', '-n', args.n ?? args.name, '-f', '--location', `https://drgn.azury.dev/${args.n ?? args.name}_${id}`, '-A', `https://drgn.azury.dev/run?version=v0.6.1&name=${url.split('/')[0].split('@')[0]}&url=${btoa(`https://deno.land/x/${url}`)}&location=${args.n ?? args.name}_${id}`]
+    cmd: ['deno', 'install', '-q', '-n', args.n ?? args.name, '-f', '--location', `https://drgn.azury.dev/${args.n ?? args.name}_${id}`, '-A', `https://drgn.azury.dev/run?version=v0.6.2&name=${url.split('/')[0].split('@')[0]}&url=${btoa(`https://deno.land/x/${url}`)}&location=${args.n ?? args.name}_${id}`]
   }).status()
 
   Deno.exit()
