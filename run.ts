@@ -27,7 +27,7 @@ if (import.meta.main) {
   
     Deno.env.set('__drgn-last_checked', time.toString())
     Deno.env.set('__drgn-url', btoa('$url'))
-    Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
+    Deno.env.set('__drgn-location', btoa('https://drgn.azury.dev/$location'))
     Deno.env.set('__drgn-version', latestVersion)
       
     const mod = await import('$url'.replace('$version', latestVersion))
@@ -38,7 +38,7 @@ if (import.meta.main) {
   } else {
     Deno.env.set('__drgn-last_checked', item.split(':')[1])
     Deno.env.set('__drgn-url', btoa('$url'))
-    Deno.env.set('__drgn-location', btoa('https://azury.dev/drgn_$location'))
+    Deno.env.set('__drgn-location', btoa('https://drgn.azury.dev/$location'))
     Deno.env.set('__drgn-version', item.split(':')[0])
 
     const mod = await import('$url'.replace('$version', item.split(':')[0]))

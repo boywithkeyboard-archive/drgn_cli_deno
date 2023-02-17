@@ -7,7 +7,7 @@ A full-stack CLI library for deploying and managing enterprise-grade command lin
 #### Create a simple CLI
 
 ```ts
-import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.5.3'
+import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.6.0'
 
 const sayCommand = new Command({
   name: 'say',
@@ -17,12 +17,9 @@ const sayCommand = new Command({
   console.log(_[1]) // mycli say hello -> 'hello'
 })
 
-const cli = new drgn()
+export default new drgn()
   .name('mycli')
   .command(sayCommand)
-  .run
-
-export default cli
 ```
 
 #### Install your CLI (for autoupdates)
@@ -31,5 +28,5 @@ export default cli
 # -n: the name under which your cli should be installed
 # -u: the url to your script - MUST be hosted on deno.land, e.g. https://deno.land/x/mycli/$version/cli/mod.ts
 
-deno run -A -q https://deno.land/x/drgn@v0.5.3/installer.js -n mycli -u mycli@$version/cli/mod.ts
+deno run -A -q https://deno.land/x/drgn@v0.6.0/installer.js -n mycli -u mycli@$version/cli/mod.ts
 ```
