@@ -66,7 +66,32 @@ export default {
       const response = new Response(runScript, {
         headers: {
           'content-type': 'application/x-typescript; charset=utf-8;',
-          'control-cache': `public, max-age=${365*86400}` // 365 days
+          'cache-control': `public, max-age=${365*86400}` // 365 days
+        }
+      })
+
+      if (response.ok)
+        context.waitUntil(cache.put(request, response.clone()))
+
+      return response
+    } else if (url.pathname === '/install') {
+      if (!query.name || !query.url)
+        return new Response(null, { status: 400 })
+
+      const res = await fetch('https://deno.land/x/drgn@v0.7.0/custom_installer.js')
+
+      if (!res.ok)
+        return new Response(null, { status: 400 })
+
+      const installScript = (await res.text())
+        .replaceAll('$name', query.name)
+        .replaceAll('$url', query.url)
+        .replaceAll('$id', Date.now().toString())
+
+      const response = new Response(installScript, {
+        headers: {
+          'content-type': 'application/javascript; charset=utf-8;',
+          'cache-control': `public, max-age=${365*86400}` // 365 days
         }
       })
 
