@@ -1,5 +1,43 @@
+async function getModule(name: string, context: any, cache: Cache): Promise<Record<string, unknown> | undefined> {
+  try {
+    const moduleUrl = new URL('https://apiland.deno.dev/v2/modules/' + name)
+
+    const cachedResponse = await cache.match(moduleUrl)
+
+    if (cachedResponse)
+      return await cachedResponse.json()
+
+    const res = await fetch(moduleUrl)
+      
+    if (res.ok) {
+      const json = await res.json()
+
+      const transformedResponse = new Response(JSON.stringify(json), {
+        headers: {
+          'content-type': 'application/json; charset=utf-8;',
+          'cache-control': `public, max-age=${15 * 60}` // 15 minutes
+        }
+      })
+
+      context.waitUntil(cache.put(moduleUrl, transformedResponse))
+      
+      return json
+    }
+  } catch (_err) {
+    return undefined
+  }
+}
+
 export default {
   async fetch(request: Request, _env: unknown, context: any) {
+    if (request.method !== 'GET')
+      return new Response('Not Found', {
+        status: 404,
+        headers: {
+          'content-type': 'text/plain; charset=utf-8;'
+        }
+      })
+
     const cache = await caches.open('drgn')
 
     const cachedResponse = await cache.match(request)
@@ -11,29 +49,49 @@ export default {
 
     const query = Object.fromEntries(url.searchParams)
 
-    if (!query.version || !query.name || !query.url || !query.location)
-      return new Response(null, { status: 400 })
+    if (url.pathname === '/run') {
+      if (!query.version || !query.name || !query.url || !query.location)
+        return new Response(null, { status: 400 })
 
-    const res = await fetch(`https://deno.land/x/drgn@${query.version}/run.ts`)
+      const res = await fetch(`https://deno.land/x/drgn@${query.version}/run.ts`)
 
-    if (!res.ok)
-      return new Response(null, { status: 400 })
+      if (!res.ok)
+        return new Response(null, { status: 400 })
 
-    const runScript = (await res.text())
-      .replaceAll('$name', query.name)
-      .replaceAll('$url', atob(query.url))
-      .replaceAll('$location', query.location)
+      const runScript = (await res.text())
+        .replaceAll('$name', query.name)
+        .replaceAll('$url', atob(query.url))
+        .replaceAll('$location', query.location)
 
-    const response = new Response(runScript, {
-      headers: {
-        'content-type': 'application/x-typescript; charset=utf-8;',
-        'control-cache': `public, max-age=${365*86400}`
-      }
-    })
+      const response = new Response(runScript, {
+        headers: {
+          'content-type': 'application/x-typescript; charset=utf-8;',
+          'control-cache': `public, max-age=${365*86400}` // 365 days
+        }
+      })
 
-    if (response.ok)
-      context.waitUntil(cache.put(request, response.clone()))
+      if (response.ok)
+        context.waitUntil(cache.put(request, response.clone()))
 
-    return response
+      return response
+    } else {
+      const pathname = url.pathname.replace('/', '')
+
+      if (pathname.includes('/'))
+        return new Response(null, { status: 500 })
+
+      const module = await getModule(pathname, context, cache)
+
+      if (!module)
+        return new Response(null, {
+          status: 500
+        })
+
+      return new Response(module.latest_version as string, {
+        headers: {
+          'content-type': 'text/plain; charset=utf-8;'
+        }
+      })
+    }
   }
 }
