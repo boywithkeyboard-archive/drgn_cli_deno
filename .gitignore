@@ -1,1 +1,2 @@
-worker/worker.js
+worker.js
+deno.lock
