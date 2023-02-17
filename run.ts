@@ -3,11 +3,8 @@ if (import.meta.main) {
     try {
       const res = await fetch('https://drgn.azury.dev/$name')
   
-      if (res.ok) {
-        const json = await res.json()
-  
-        return json ? json.latest_version : ''
-      }
+      if (res.ok)
+        return await res.text()
     } catch (_err) {
       return undefined
     }
