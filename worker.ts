@@ -78,7 +78,7 @@ export default {
       if (!query.name || !query.url)
         return new Response(null, { status: 400 })
 
-      const res = await fetch('https://deno.land/x/drgn@v0.8.0/custom_installer.js')
+      const res = await fetch('https://deno.land/x/drgn@v0.9.0/custom_installer.js')
 
       if (!res.ok)
         return new Response(null, { status: 400 })
