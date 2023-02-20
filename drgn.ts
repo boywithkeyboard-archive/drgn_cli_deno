@@ -19,13 +19,19 @@ export class drgn {
   } 
 
   private async executeCommand(args: ParsedArgs) {
-    if (typeof args._[0] !== 'string')
-      return 0
+    if (typeof args._[0] !== 'string') {
+      await error(`command not found. try ${underline(`${this.n} --help`)}`)
+
+      Deno.exit(1)
+    }
 
     let command = this.c.get(args._[0])
 
-    if (!command)
-      return 0
+    if (!command) {
+      await error(`command not found. try ${underline(`${this.n} --help`)}`)
+
+      Deno.exit(1)
+    }
 
     if (typeof command === 'string')
       command = this.c.get(command) as Command
@@ -33,20 +39,23 @@ export class drgn {
     try {
       await command.action({ version: Deno.env.get('__drgn-version') ?? 'v0.0.0', ...args })
 
-      return 0
+      Deno.exit()
     } catch (err) {
       if (err instanceof Error)
         await error(err.message)
 
-      return 1
+      Deno.exit(1)
     }
   }
 
   private async executeOption(args: ParsedArgs) {
     let option = this.o.get(Object.keys(args).filter(key => key !== '_')[0])
 
-    if (!option)
-      return 0
+    if (!option) {
+      await error(`option not found. try ${underline(`${this.n} --help`)}`)
+
+      Deno.exit(1)
+    }
 
     if (typeof option === 'string')
       option = this.o.get(option) as Option
@@ -54,12 +63,12 @@ export class drgn {
     try {
       await option.action({ version: Deno.env.get('__drgn-version') ?? 'v0.0.0', ...args })
 
-      return 0
+      Deno.exit()
     } catch (err) {
       if (err instanceof Error)
         await error(err.message)
 
-      return 1
+      Deno.exit(1)
     }
   }
 
@@ -88,29 +97,23 @@ export class drgn {
 
     await log(gray(text))
 
-    return 0
+    Deno.exit()
   }
 
   private async printVersion() {
     const url = Deno.env.get('__drgn-url')
 
-    if (!url) {
-      await error('something went wrong')
-
-      return 1
-    }
+    if (!url)
+      Deno.exit(1)
 
     const item = localStorage.getItem(url)
 
-    if (!item) {
-      await error('something went wrong')
-
-      return 1
-    }
+    if (!item)
+      Deno.exit(1)
 
     await log(gray(`${bold(this.n ?? '')} ${item.split(':')[0]}\n\n${italic(`Checked for updates ${ms(Date.now() - Number(item.split(':')[1]), { long: true })} ago.`)}`))
 
-    return 0
+    Deno.exit()
   }
 
   name(name: string) {
@@ -140,17 +143,13 @@ export class drgn {
   async run() {
     const args = parse(Deno.args)
 
-    let result: number
-
     if (args._.length > 0 && typeof args._[0] === 'string')
-      result = await this.executeCommand(args)
+      await this.executeCommand(args)
     else if (args.version || args.v)
-      result = await this.printVersion()
+      await this.printVersion()
     else if (args.help || args.h)
-      result = await this.printHelp()
+      await this.printHelp()
     else
-      result = await this.executeOption(args)
-
-    return result
+      await this.executeOption(args)
   }
 }

@@ -29,9 +29,7 @@ if (import.meta.main) {
       
     const mod = await import('$url'.replace('$version', latestVersion))
   
-    , exitCode = typeof mod.default === 'function' ? await mod.default() : await mod.run()
-  
-    Deno.exit(exitCode)
+    typeof mod.default === 'function' ? await mod.default() : await mod.default.run()
   } else {
     Deno.env.set('__drgn-last_checked', item.split(':')[1])
     Deno.env.set('__drgn-url', btoa('$url'))
@@ -40,8 +38,6 @@ if (import.meta.main) {
 
     const mod = await import('$url'.replace('$version', item.split(':')[0]))
 
-    , exitCode = typeof mod.default === 'function' ? await mod.default() : await mod.run()
-
-    Deno.exit(exitCode)
+    typeof mod.default === 'function' ? await mod.default() : await mod.default.run()
   }
 }
