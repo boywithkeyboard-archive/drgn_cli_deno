@@ -106,7 +106,7 @@ export class drgn {
     if (!url)
       Deno.exit(1)
 
-    const item = localStorage.getItem(url)
+    const item = localStorage.getItem(atob(url))
 
     if (!item)
       Deno.exit(1)
