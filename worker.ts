@@ -1,13 +1,13 @@
 async function getModule(name: string, context: any, cache: Cache): Promise<Record<string, unknown> | undefined> {
   try {
-    const moduleUrl = new URL('https://apiland.deno.dev/v2/modules/' + name)
+    const moduleUrl = new URL('https://drgn.azury.dev/deno/modules/' + name)
 
     const cachedResponse = await cache.match(moduleUrl)
 
     if (cachedResponse)
       return await cachedResponse.json()
 
-    const res = await fetch(moduleUrl)
+    const res = await fetch('https://apiland.deno.dev/v2/modules/' + name)
       
     if (res.ok) {
       const json = await res.json()
