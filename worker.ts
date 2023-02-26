@@ -88,7 +88,7 @@ export default {
       if (!query.name || !query.url)
         return new Response(null, { status: 400 })
 
-      const res = await fetch('https://deno.land/x/drgn@v0.10.0/custom_installer.js')
+      const res = await fetch('https://deno.land/x/drgn@v0.10.1/custom_installer.js')
 
       if (!res.ok)
         return new Response(null, { status: 400 })
@@ -97,7 +97,6 @@ export default {
         .replaceAll('$name', query.name)
         .replaceAll('$url', query.url)
         .replaceAll('$id', Date.now().toString())
-        .replaceAll('$canary', `${query.canary === 'true'}`)
 
       const response = new Response(installScript, {
         headers: {
