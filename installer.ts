@@ -1,4 +1,4 @@
-import { parse } from 'https://deno.land/std@v0.177.0/flags/mod.ts'
+import { parse } from 'https://deno.land/std@v0.178.0/flags/mod.ts'
 
 if (import.meta.main) {
   const args = parse(Deno.args)
