@@ -1,7 +1,9 @@
 if (import.meta.main) {
+  const allowCanary = false
+
   const fetchVersion = async (): Promise<string | undefined> => {
     try {
-      const res = await fetch('https://drgn.azury.dev/$name')
+      const res = await fetch(`https://drgn.azury.dev/$name?canary=${allowCanary}`)
   
       if (res.ok)
         return await res.text()

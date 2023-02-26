@@ -28,6 +28,15 @@ async function getModule(name: string, context: any, cache: Cache): Promise<Reco
   }
 }
 
+function isCanary(version: string) {
+  return version.includes('canary') ||
+    version.includes('beta') ||
+    version.includes('rc') ||
+    version.includes('alpha') ||
+    version.includes('prerelease') ||
+    version.includes('unstable')
+}
+
 export default {
   async fetch(request: Request, _env: unknown, context: any) {
     if (request.method !== 'GET')
@@ -62,6 +71,7 @@ export default {
         .replaceAll('$name', query.name)
         .replaceAll('$url', atob(query.url))
         .replaceAll('$location', query.location)
+        .replaceAll('const allowCanary = false', `const allowCanary = ${query.canary === 'true'}`)
 
       const response = new Response(runScript, {
         headers: {
@@ -78,7 +88,7 @@ export default {
       if (!query.name || !query.url)
         return new Response(null, { status: 400 })
 
-      const res = await fetch('https://deno.land/x/drgn@v0.9.1/custom_installer.js')
+      const res = await fetch('https://deno.land/x/drgn@v0.10.0/custom_installer.js')
 
       if (!res.ok)
         return new Response(null, { status: 400 })
@@ -87,6 +97,7 @@ export default {
         .replaceAll('$name', query.name)
         .replaceAll('$url', query.url)
         .replaceAll('$id', Date.now().toString())
+        .replaceAll('$canary', `${query.canary === 'true'}`)
 
       const response = new Response(installScript, {
         headers: {
@@ -112,7 +123,22 @@ export default {
           status: 500
         })
 
-      return new Response(module.latest_version as string, {
+      const allowCanary = query.canary === 'true'
+
+      let version = module.latest_version as string
+
+      if (!allowCanary) {
+        if (isCanary(version)) {
+          for (const v of module.versions as string[]) {
+            if (isCanary(v))
+              continue
+            else
+              version = v
+          }
+        }
+      }
+
+      return new Response(version, {
         headers: {
           'content-type': 'text/plain; charset=utf-8;'
         }
