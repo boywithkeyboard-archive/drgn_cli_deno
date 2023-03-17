@@ -1,4 +1,4 @@
-import { brightBlue, brightGreen, brightRed, gray, brightYellow } from 'https://deno.land/std@v0.179.0/fmt/colors.ts'
+import { brightBlue, brightGreen, brightRed, gray, brightYellow } from 'https://deno.land/std@v0.180.0/fmt/colors.ts'
 
 const log = async (message: string, options?: { clear: boolean }) => {
   if (options?.clear)
