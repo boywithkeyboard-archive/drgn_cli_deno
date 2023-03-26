@@ -1,5 +1,5 @@
-import { parse } from 'https://deno.land/std@v0.180.0/flags/mod.ts'
-import { bold, gray, italic, underline, white } from 'https://deno.land/std@v0.180.0/fmt/colors.ts'
+import { parse } from 'https://deno.land/std@v0.181.0/flags/mod.ts'
+import { bold, gray, italic, underline, white } from 'https://deno.land/std@v0.181.0/fmt/colors.ts'
 import log, { error } from './log.ts'
 import ms from 'https://cdn.skypack.dev/ms@2.1.3?dts'
 import type { Command } from './Command.ts'
