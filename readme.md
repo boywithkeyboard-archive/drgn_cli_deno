@@ -7,7 +7,7 @@ A full-stack CLI library for deploying and managing enterprise-grade command lin
 #### Create a simple CLI
 
 ```ts
-import drgn, { Command, Option } from 'https://deno.gg/drgn@v0.10.0'
+import drgn, { Command, Option } from 'https://deno.land/x/drgn@v0.10.2/mod.ts'
 
 const sayCommand = new Command({
   name: 'say',
@@ -29,8 +29,8 @@ export default new drgn()
 # -n: the name under which your cli should be installed
 # -u: the url to your script - MUST be hosted on deno.land, e.g. https://deno.land/x/mycli/$version/cli/mod.ts
 
-deno run -A -q https://deno.land/x/drgn@v0.10.0/installer.js -n mycli -u mycli@$version/cli/mod.ts
+deno run -A -q https://deno.land/x/drgn@v0.10.2/installer.js -n mycli -u mycli@$version/cli/mod.ts
 
 # optionally, if you want to allow canary releases:
-deno run -A -q https://deno.land/x/drgn@v0.10.0/installer.js -n mycli -u mycli@$version/cli/mod.ts --canary
+deno run -A -q https://deno.land/x/drgn@v0.10.2/installer.js -n mycli -u mycli@$version/cli/mod.ts --canary
 ```
