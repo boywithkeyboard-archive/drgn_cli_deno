@@ -1,8 +1,8 @@
 {
   "tasks": {
-    "build:installer": "deno bundle installer.ts installer.js && deno run -A https://deno.land/x/esbuild@v0.17.14/mod.js installer.js --bundle --minify --allow-overwrite --format=esm --outfile=installer.js",
-    "build:custom_installer": "deno run -A https://deno.land/x/esbuild@v0.17.14/mod.js custom_installer.ts --bundle --minify --format=esm --outfile=custom_installer.js",
-    "build:worker": "deno run -A https://deno.land/x/esbuild@v0.17.14/mod.js worker.ts --format=esm --minify --outfile=worker.js",
+    "build:installer": "deno bundle installer.ts installer.js && deno run -A https://deno.land/x/esbuild@v0.17.15/mod.js installer.js --bundle --minify --allow-overwrite --format=esm --outfile=installer.js",
+    "build:custom_installer": "deno run -A https://deno.land/x/esbuild@v0.17.15/mod.js custom_installer.ts --bundle --minify --format=esm --outfile=custom_installer.js",
+    "build:worker": "deno run -A https://deno.land/x/esbuild@v0.17.15/mod.js worker.ts --format=esm --minify --outfile=worker.js",
     "build": "deno task build:installer && deno task build:custom_installer && deno task build:worker",
     "publish": "npx wrangler publish worker.js"
   }
