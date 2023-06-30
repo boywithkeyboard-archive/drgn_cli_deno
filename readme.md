@@ -1,4 +1,10 @@
-## drgn
+<div align='center'>
+  <img src='https://raw.githubusercontent.com/azurystudio/drgn/dev/.github/drgn.svg' width='64px' />
+  <h1>drgn</h1>
+</div>
+
+<br>
+<br>
 
 A full-stack CLI library for deploying and managing enterprise-grade command line applications.
 
