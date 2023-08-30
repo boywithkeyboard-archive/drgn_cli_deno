@@ -1,5 +1,6 @@
 {
   "deno.enable": true,
+  "deno.inlayHints.parameterNames.enabled": "all",
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "files.insertFinalNewline": true,
