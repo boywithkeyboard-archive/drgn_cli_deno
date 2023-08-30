@@ -1,4 +1,4 @@
-export { drgn as default } from './drgn.ts'
-export { Command } from './Command.ts'
-export { Option } from './Option.ts'
-export { success, error, info, warn, default as log } from './log.ts'
+export { command } from './command.ts'
+export type { drgn as default } from './drgn.ts'
+export { Logger, logger } from './logger.ts'
+export { z } from 'https://deno.land/x/zod@v3.22.2/mod.ts'
