@@ -1,42 +1,47 @@
-<div align='center'>
-  <img src='https://raw.githubusercontent.com/azurystudio/drgn/dev/.github/drgn.svg' width='64px' />
-  <h1>drgn</h1>
-</div>
-
-<br>
-<br>
-
-A full-stack CLI library for deploying and managing enterprise-grade command line applications.
+## drgn
 
 ### Usage
 
-#### Create a simple CLI
+1. **Configure drgn.**
 
-```ts
-import drgn, { Command, Option } from 'https://deno.land/x/drgn@v0.10.2/mod.ts'
+   `./drgn.ts`
+   ```ts
+   import drgn from 'https://deno.land/x/drgn@v0.11.0/mod.ts'
 
-const sayCommand = new Command({
-  name: 'say',
-  alias: 's',
-  description: 'Say something to me.',
-  usage: 'say <sentence>'
-}, ({ _ }) => {
-  console.log(_[1]) // mycli say hello -> 'hello'
-})
+   export default <drgn.config> {
+     name: 'greeter',
+     version: '0.1.0', // current version
+     autoUpdate: { // optional, can also be a function
+       registry: 'deno.land',
+       moduleName: 'greeter',
+     },
+   }
+   ```
 
-export default new drgn()
-  .name('mycli')
-  .command(sayCommand)
-```
+2. **Create a command.**
 
-#### Install your CLI (for autoupdates)
+   `./commands/greet.ts`
+   ```ts
+   import { command, z } from 'https://deno.land/x/drgn@v0.11.0/mod.ts'
 
-```bash
-# -n: the name under which your cli should be installed
-# -u: the url to your script - MUST be hosted on deno.land, e.g. https://deno.land/x/mycli/$version/cli/mod.ts
+   export default command('Greet somebody.', {
+     name: {
+       alias: 'n',
+       schema: z.string().min(1).max(32),
+     },
+   }, (ctx) => {
+     console.log(`Hey, ${ctx.arg('name')}!`)
+   })
+   ```
 
-deno run -A -q https://deno.land/x/drgn@v0.10.2/installer.js -n mycli -u mycli@$version/cli/mod.ts
+3. **Build it.**
 
-# optionally, if you want to allow canary releases:
-deno run -A -q https://deno.land/x/drgn@v0.10.2/installer.js -n mycli -u mycli@$version/cli/mod.ts --canary
-```
+   ```bash
+   deno run -A https://deno.land/x/drgn@v0.11.0/build.ts
+   ```
+
+4. **Run it.**
+
+   ```bash
+   deno run ./out/cli.js greet --name Tom # Hey, Tom!
+   ```
