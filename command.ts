@@ -1,38 +1,38 @@
-import { drgn } from './drgn.ts'
+import { ArgSchema, Command } from './types.ts'
 
 export function command<
-  Args extends Record<string, drgn.argSchema> = Record<string, never>,
+  Args extends Record<string, ArgSchema> = Record<string, never>,
 >(
-  handler: drgn.command<Args>['handler'],
-): drgn.command<Args>
+  handler: Command<Args>['handler'],
+): Command<Args>
 
 export function command<
-  Args extends Record<string, drgn.argSchema> = Record<string, never>,
+  Args extends Record<string, ArgSchema> = Record<string, never>,
 >(
   args: Args,
-  handler: drgn.command<Args>['handler'],
-): drgn.command<Args>
+  handler: Command<Args>['handler'],
+): Command<Args>
 
 export function command<
-  Args extends Record<string, drgn.argSchema> = Record<string, never>,
+  Args extends Record<string, ArgSchema> = Record<string, never>,
 >(
   description: string,
-  handler: drgn.command<Args>['handler'],
-): drgn.command<Args>
+  handler: Command<Args>['handler'],
+): Command<Args>
 
 export function command<
-  Args extends Record<string, drgn.argSchema> = Record<string, never>,
+  Args extends Record<string, ArgSchema> = Record<string, never>,
 >(
   description: string,
   args: Args,
-  handler: drgn.command<Args>['handler'],
-): drgn.command<Args>
+  handler: Command<Args>['handler'],
+): Command<Args>
 
 export function command<
-  Args extends Record<string, drgn.argSchema> = Record<string, never>,
+  Args extends Record<string, ArgSchema> = Record<string, never>,
 >(
-  ...args: Array<string | Args | drgn.command<Args>['handler']>
-): drgn.command<Args> {
+  ...args: Array<string | Args | Command<Args>['handler']>
+): Command<Args> {
   return {
     description: args.filter((arg) => typeof arg === 'string')[0] as
       | string
@@ -40,7 +40,7 @@ export function command<
     args: args.filter((arg) =>
       typeof arg !== 'string' && typeof arg !== 'function'
     )[0] as Args | undefined,
-    handler: args.filter((arg) => typeof arg === 'function')[0] as drgn.command<
+    handler: args.filter((arg) => typeof arg === 'function')[0] as Command<
       Args
     >['handler'],
   }

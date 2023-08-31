@@ -4,18 +4,21 @@
 
 1. **Configure drgn.**
 
-   `./drgn.ts`
+   `./mod.ts`
    ```ts
    import drgn from 'https://deno.land/x/drgn@v0.11.0/mod.ts'
+   import greet from './commands/greet.ts'
 
-   export default <drgn.config> {
+   new drgn({
      name: 'greeter',
      version: '0.1.0', // current version
-     autoUpdate: { // optional, can also be a function
+     checkUpdate: { // optional, can also be a function
        registry: 'deno.land',
        moduleName: 'greeter',
      },
-   }
+   })
+     .command('greet', greet)
+     .run()
    ```
 
 2. **Create a command.**
@@ -34,14 +37,8 @@
    })
    ```
 
-3. **Build it.**
+3. **Run it.**
 
    ```bash
-   deno run -A https://deno.land/x/drgn@v0.11.0/build.ts
-   ```
-
-4. **Run it.**
-
-   ```bash
-   deno run ./out/cli.js greet --name Tom # Hey, Tom!
+   deno run ./mod.ts greet --name Tom # Hey, Tom!
    ```

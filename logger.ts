@@ -20,6 +20,11 @@ export class Logger {
     console.log(`${brightGreen('success')} ${gray(`- ${message}`)}`)
   }
 
+  warning(message: string) {
+    console.clear()
+    console.error(`${brightYellow('warning')} ${gray(`- ${message}`)}`)
+  }
+
   wait(message: string) {
     console.clear()
     console.log(`${brightYellow('wait')} ${gray(`- ${message}...`)}`)

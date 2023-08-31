@@ -1,37 +1,23 @@
-import { ZodType } from 'https://deno.land/x/zod@v3.22.2/mod.ts'
+import { run } from './run.ts'
+import { Command, Config } from './types.ts'
 
-// deno-lint-ignore no-namespace
-export namespace drgn {
-  export type config = {
-    name: string
-    version?: string
-    autoUpdate?:
-      | {
-        registry: 'deno.land'
-        moduleName: string
-      }
-      | (() => Promise<string> | string)
+export class drgn {
+  #config
+  #commands: [string, Command][]
+
+  constructor(config: Config) {
+    this.#config = config
+    this.#commands = []
   }
 
-  export type context<
-    Args extends Record<string, drgn.argSchema>,
-  > = {
-    raw: {
-      [x: string]: unknown
-      _: (string | number)[]
-    }
-    arg: <T extends keyof Args>(name: T) => Args[T]
+  // deno-lint-ignore no-explicit-any
+  command(name: string, command: Command<any>) {
+    this.#commands.push([name, command])
+
+    return this
   }
 
-  export type argSchema = {
-    alias?: string | string[]
-    description?: string
-    schema: ZodType
-  }
-
-  export type command<Args extends Record<string, drgn.argSchema>> = {
-    description?: string
-    args?: Args
-    handler: (ctx: drgn.context<Args>) => Promise<void> | void
+  run() {
+    return run(this.#config, this.#commands)
   }
 }
