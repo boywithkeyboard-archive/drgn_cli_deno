@@ -3,16 +3,16 @@ import { Command, Config } from './types.ts'
 
 export class drgn {
   #config
-  #commands: [string, Command][]
+  #commands
 
   constructor(config: Config) {
     this.#config = config
-    this.#commands = []
+    this.#commands = new Map<string, Command>()
   }
 
   // deno-lint-ignore no-explicit-any
   command(name: string, command: Command<any>) {
-    this.#commands.push([name, command])
+    this.#commands.set(name, command)
 
     return this
   }
