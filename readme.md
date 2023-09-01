@@ -6,7 +6,7 @@
 
    `./mod.ts`
    ```ts
-   import drgn from 'https://deno.land/x/drgn@v0.11.0/mod.ts'
+   import drgn from 'https://deno.land/x/drgn@v0.11.1/mod.ts'
    import greet from './commands/greet.ts'
 
    new drgn({
@@ -25,7 +25,7 @@
 
    `./commands/greet.ts`
    ```ts
-   import { command, z } from 'https://deno.land/x/drgn@v0.11.0/mod.ts'
+   import { command, z } from 'https://deno.land/x/drgn@v0.11.1/mod.ts'
 
    export default command('Greet somebody.', {
      name: {
