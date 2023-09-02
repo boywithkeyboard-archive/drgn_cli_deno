@@ -1,4 +1,4 @@
-import { parse } from 'https://deno.land/std@0.200.0/flags/mod.ts'
+import { parse } from 'https://deno.land/std@0.201.0/flags/mod.ts'
 import { z, ZodType } from 'https://deno.land/x/zod@v3.22.2/mod.ts'
 
 export type Config = {

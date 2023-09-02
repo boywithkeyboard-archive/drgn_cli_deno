@@ -1,7 +1,7 @@
 import {
   brightYellow,
   white,
-} from 'https://deno.land/std@0.200.0/fmt/colors.ts'
+} from 'https://deno.land/std@0.201.0/fmt/colors.ts'
 import { Config } from './types.ts'
 
 export async function checkUpdate(config: Config) {
