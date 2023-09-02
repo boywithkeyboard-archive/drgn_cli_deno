@@ -3,7 +3,7 @@ import {
   brightRed,
   brightYellow,
   gray,
-} from 'https://deno.land/std@0.200.0/fmt/colors.ts'
+} from 'https://deno.land/std@0.201.0/fmt/colors.ts'
 
 export class Logger {
   constructor() {}
