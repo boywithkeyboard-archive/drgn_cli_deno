@@ -1,5 +1,5 @@
-import { parse } from 'https://deno.land/std@0.201.0/flags/mod.ts'
-import { white } from 'https://deno.land/std@0.201.0/fmt/colors.ts'
+import { parse } from 'https://deno.land/std@0.204.0/flags/mod.ts'
+import { white } from 'https://deno.land/std@0.204.0/fmt/colors.ts'
 import { logger } from './logger.ts'
 import { Command } from './types.ts'
 

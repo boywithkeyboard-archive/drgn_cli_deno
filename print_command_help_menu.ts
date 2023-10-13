@@ -2,7 +2,7 @@ import {
   gray,
   underline,
   white,
-} from 'https://deno.land/std@0.201.0/fmt/colors.ts'
+} from 'https://deno.land/std@0.204.0/fmt/colors.ts'
 import { Command, Config } from './types.ts'
 
 export function printCommandHelpMenu(
