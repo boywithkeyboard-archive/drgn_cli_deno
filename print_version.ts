@@ -1,4 +1,4 @@
-import { gray, white } from 'https://deno.land/std@0.201.0/fmt/colors.ts'
+import { gray, white } from 'https://deno.land/std@0.204.0/fmt/colors.ts'
 import { Config } from './types.ts'
 
 export function printVersion(config: Config) {

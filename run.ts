@@ -1,4 +1,4 @@
-import { parse } from 'https://deno.land/std@0.201.0/flags/mod.ts'
+import { parse } from 'https://deno.land/std@0.204.0/flags/mod.ts'
 import { checkUpdate } from './check_update.ts'
 import { executeCommand } from './execute_command.ts'
 import { logger } from './logger.ts'
